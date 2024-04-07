@@ -47,7 +47,7 @@ class PrivateRecipeAPITests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = get_user_model().objects.create_user(
-            'user@example.com',
+            'user999@example.com',
             'testpass123'
         )
         self.client.force_authenticate(self.user)
@@ -67,7 +67,7 @@ class PrivateRecipeAPITests(TestCase):
     def test_recipes_limited_to_user(self):
         """Test retrieving recipes for user"""
         other_user = get_user_model().objects.create_user(
-            'user@example.com',
+            'user99@example.com',
             'password123123'
         )
         create_recipe(user=other_user)
@@ -101,4 +101,4 @@ class PrivateRecipeAPITests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
         # Check that no data is returned in the response
-        self.assertEqual(res.data, [])
+        self.assertEqual(res.data['detail'], 'Authentication credentials were not provided.')
